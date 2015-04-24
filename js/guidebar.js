@@ -1,55 +1,51 @@
-var guidebar;
-var documentHeight;
-var sectionHeaders = [];
-var numSections;
+var Guidebar = {
+  guidebar: "",
+  documentHeight: 0,
 
-function createGuidebar() {
-  documentHeight = getDocumentHeight();
-  guidebar = document.getElementById("guidebar");
-  sectionHeaders = document.getElementsByTagName("h2");
 
-  numSections = sectionHeaders.length;
+  goTo: function (yPos) { window.scrollTo(0,yPos); }, // Wrapper for scrollTo
 
-  for ( var i = 0; i < numSections; i++ ) {
-    // console.log(sectionHeaders[i].innerHTML + " : " + sectionHeaders[i].offsetTop + " : " + getElementOffset(sectionHeaders[i]));
+  // Get vertical position of the guide element within the guidebar
+  // Returns percentage used in vertical positioning
+  getElementOffset: function (el) {
+    return (el.offsetTop / documentHeight * 100);
+  },
 
-    // Populate Guidebar with clickable guides
-    guidebar.innerHTML += "<p style='top:"
-      + getElementOffset(sectionHeaders[i])+"%;'"
-      + "onclick='goTo(" + sectionHeaders[i].offsetTop + ")'>"
-      + sectionHeaders[i].innerHTML
-      + "</p>";
+  getDocumentHeight: function () { //  Needed for cross-browser compatibility
+    return height =
+      Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.clientHeight,
+        document.documentElement.scrollHeight,
+        document.documentElement.offsetHeight
+      );
+  },
+
+  createGuidebar: function () {
+    guidebar = document.getElementById("guidebar");
+    documentHeight = Guidebar.getDocumentHeight();
+
+    var sectionHeaders = document.getElementsByTagName("h2");
+
+    for ( var i = 0; i < sectionHeaders.length; i++ ) {
+      // Populate Guidebar with clickable guides
+      guidebar.innerHTML += "<p style='top:"
+        + Guidebar.getElementOffset(sectionHeaders[i])+"%;'"
+        + "onclick='Guidebar.goTo(" + sectionHeaders[i].offsetTop + ")'>"
+        + sectionHeaders[i].innerHTML
+        + "</p>";
+    }
+  },
+
+  resetGuidebar: function () {
+    guidebar.innerHTML = "";
+    Guidebar.createGuidebar();
   }
-}
-
-// Wrapper for scrollTo
-function goTo(yPos) { window.scrollTo(0,yPos); }
-
-// Get vertical position of the guide element within the guidebar
-// Returns percentage to be used in vertical positioning
-function getElementOffset(el) {
-  return (el.offsetTop / documentHeight * 100);
-}
-
-// Get document height in cross browswer compatible way
-function getDocumentHeight() {
-  return height =
-    Math.max(
-      document.body.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.clientHeight,
-      document.documentElement.scrollHeight,
-      document.documentElement.offsetHeight
-    );
-}
-
-function resetGuidebar() {
-  guidebar.innerHTML = "";
-  createGuidebar();
-}
+};
 
 // Load Guidebar
-window.addEventListener("load", createGuidebar);
+window.addEventListener("load", Guidebar.createGuidebar);
 
 // If content is responsive, we will need to recalculate positions on resize
-window.addEventListener("resize", resetGuidebar);
+window.addEventListener("resize", Guidebar.resetGuidebar);
