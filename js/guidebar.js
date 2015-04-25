@@ -1,7 +1,7 @@
 var Guidebar = {
   guidebar: "",
   documentHeight: 0,
-
+  sectionheaders:[],
 
   goTo: function (yPos) { window.scrollTo(0,yPos); }, // Wrapper for scrollTo
 
@@ -23,18 +23,30 @@ var Guidebar = {
   },
 
   createGuidebar: function () {
-    guidebar = document.getElementById("guidebar");
-    documentHeight = Guidebar.getDocumentHeight();
 
-    var sectionHeaders = document.getElementsByTagName("h2");
+    documentHeight = Guidebar.getDocumentHeight();
+    guidebar = document.getElementById("guidebar");
+    sectionHeaders = document.getElementsByTagName("h2");
+
+    var sectionText; // the section text
+    var guide; // the element to be added to the DOM
 
     for ( var i = 0; i < sectionHeaders.length; i++ ) {
-      // Populate Guidebar with clickable guides
-      guidebar.innerHTML += "<p style='top:"
-        + Guidebar.getElementOffset(sectionHeaders[i])+"%;'"
-        + "onclick='Guidebar.goTo(" + sectionHeaders[i].offsetTop + ")'>"
-        + sectionHeaders[i].innerHTML
-        + "</p>";
+
+      guide = document.createElement("p");
+      sectionText = document.createTextNode(sectionHeaders[i].innerHTML);
+
+      // Add the element to the DOM
+      guide.appendChild(sectionText);
+      guidebar.appendChild(guide);
+
+      // Position the guide within the guidebar
+      guide.style.top = Guidebar.getElementOffset(sectionHeaders[i]) + "%";
+
+      // Make the guide clickable
+      guide.setAttribute("data-offset",sectionHeaders[i].offsetTop);
+      guide.addEventListener("click", function () { window.scrollTo(0,this.getAttribute("data-offset")) }, false);
+
     }
   },
 
