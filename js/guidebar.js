@@ -3,8 +3,6 @@ var Guidebar = {
   documentHeight: 0,
   sectionheaders:[],
 
-  goTo: function (yPos) { window.scrollTo(0,yPos); }, // Wrapper for scrollTo
-
   // Get vertical position of the guide element within the guidebar
   // Returns percentage used in vertical positioning
   getElementOffset: function (el) {
@@ -22,11 +20,10 @@ var Guidebar = {
       );
   },
 
-  createGuidebar: function () {
-
+  initialize: function (tag) {
     documentHeight = Guidebar.getDocumentHeight();
     guidebar = document.getElementById("guidebar");
-    sectionHeaders = document.getElementsByTagName("h2");
+    sectionHeaders = document.getElementsByTagName(tag);
 
     var sectionText; // the section text
     var guide; // the element to be added to the DOM
@@ -55,9 +52,6 @@ var Guidebar = {
     Guidebar.createGuidebar();
   }
 };
-
-// Load Guidebar
-window.addEventListener("load", Guidebar.createGuidebar);
 
 // If content is responsive, we will need to recalculate positions on resize
 window.addEventListener("resize", Guidebar.resetGuidebar);
