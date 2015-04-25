@@ -2,6 +2,7 @@ var Guidebar = {
   guidebar: "",
   documentHeight: 0,
   sectionheaders:[],
+  selector: "",
 
   // Get vertical position of the guide element within the guidebar
   // Returns percentage used in vertical positioning
@@ -20,10 +21,11 @@ var Guidebar = {
       );
   },
 
-  initialize: function (tag) {
+  initialize: function (selector) {
+    Guidebar.selector = selector;
     documentHeight = Guidebar.getDocumentHeight();
     guidebar = document.getElementById("guidebar");
-    sectionHeaders = document.getElementsByTagName(tag);
+    sectionHeaders = document.getElementsByTagName(selector);
 
     var sectionText; // the section text
     var guide; // the element to be added to the DOM
@@ -47,11 +49,14 @@ var Guidebar = {
     }
   },
 
-  resetGuidebar: function () {
-    guidebar.innerHTML = "";
-    Guidebar.createGuidebar();
+  reset: function () {
+    guidebar = document.getElementById("guidebar");
+    while (guidebar.firstChild) {
+        guidebar.removeChild(guidebar.firstChild);
+    }
+    Guidebar.initialize(Guidebar.selector);
   }
 };
 
-// If content is responsive, we will need to recalculate positions on resize
-window.addEventListener("resize", Guidebar.resetGuidebar);
+// If content is responsive, we need to recalculate positions on resize
+window.addEventListener("resize", Guidebar.reset);
