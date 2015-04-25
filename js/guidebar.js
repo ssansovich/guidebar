@@ -21,14 +21,22 @@ var Guidebar = {
       );
   },
 
+  getSectionHeaders: function (selector) {
+    // If the first char is a period, assume a class, otherwise assume a tag
+    if ( selector[0] == "." ) {
+      return document.getElementsByClassName("x");
+    } else {
+      return document.getElementsByTagName(selector);
+    }
+  },
+
   initialize: function (selector) {
+    var guide; // the element to be added to the DOM
+    var sectionText; // the section text
+
     Guidebar.selector = selector;
     documentHeight = Guidebar.getDocumentHeight();
-    guidebar = document.getElementById("guidebar");
-    sectionHeaders = document.getElementsByTagName(selector);
-
-    var sectionText; // the section text
-    var guide; // the element to be added to the DOM
+    sectionHeaders = Guidebar.getSectionHeaders(selector);
 
     for ( var i = 0; i < sectionHeaders.length; i++ ) {
 
