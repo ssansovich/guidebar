@@ -34,9 +34,17 @@ var Guidebar = {
     var guide; // the element to be added to the DOM
     var sectionText; // the section text
 
+    // Add the guidebar to the page
+    guidebar = document.createElement("div");
+    guidebar.setAttribute("id","guidebar");
+    document.body.appendChild(guidebar);
+
+    // Get the section header objects and extract header text
     Guidebar.selector = selector;
-    documentHeight = Guidebar.getDocumentHeight();
     sectionHeaders = Guidebar.getSectionHeaders(selector);
+
+    documentHeight = Guidebar.getDocumentHeight();
+
 
     for ( var i = 0; i < sectionHeaders.length; i++ ) {
 
